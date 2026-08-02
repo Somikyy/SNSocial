@@ -38,8 +38,12 @@ final class TelegramPoller implements Runnable {
     /** Called with (player uuid, player name) after a successful link, off the game thread. */
     private final BiConsumer<java.util.UUID, String> onLinked;
 
+    /** Re-log the same error this often: a flapping conflict resets the dedup constantly. */
+    private static final long ERROR_LOG_INTERVAL_MILLIS = 5 * 60_000;
+
     private volatile boolean running = true;
     private String lastError;
+    private long lastErrorLoggedAt;
 
     TelegramPoller(Logger logger, Texts texts, TelegramApi api, LinkService linkService,
                    long codeTtlMillis, BiConsumer<java.util.UUID, String> onLinked) {
@@ -62,7 +66,9 @@ final class TelegramPoller implements Runnable {
             try {
                 TelegramApi.Updates batch = api.getUpdates(offset, 25);
                 offset = batch.nextOffset();
-                lastError = null;
+                // lastError deliberately NOT cleared here: with two consumers on one token,
+                // success and 409 alternate, and clearing on success would re-arm the log
+                // for every flap. The 5-minute reminder covers the recovered-then-broke case.
                 long now = System.currentTimeMillis();
                 for (TelegramApi.Update update : batch.messages()) {
                     if (update.dateSeconds() * 1000L < now - codeTtlMillis) {
@@ -74,13 +80,32 @@ final class TelegramPoller implements Runnable {
                 Thread.currentThread().interrupt();
                 return;
             } catch (IOException e) {
-                // Log each distinct failure once, then go quiet: a dead token during a long
-                // night must not produce four thousand identical lines.
+                // Log each distinct failure once (with a periodic reminder), then go quiet:
+                // a dead token during a long night must not produce four thousand identical
+                // lines. The periodic part matters for the flapping case below, where
+                // successes keep resetting the dedup.
                 String message = String.valueOf(e.getMessage());
-                if (!message.equals(lastError)) {
+                long now = System.currentTimeMillis();
+                if (!message.equals(lastError)
+                        || now - lastErrorLoggedAt > ERROR_LOG_INTERVAL_MILLIS) {
                     lastError = message;
-                    logger.warning("Telegram недоступен, повторяю каждые 10 секунд: "
-                            + message);
+                    lastErrorLoggedAt = now;
+                    if (message.contains("Conflict")) {
+                        // 409 Conflict: Telegram allows exactly ONE getUpdates consumer per
+                        // token. Seen in the wild on the very first live test: SNSocial and
+                        // the SNTelegram bridge sharing one bot steal each other's updates,
+                        // and link codes arrive "every other time". Generic "недоступен"
+                        // here costs the admin an evening; the real cause costs one line.
+                        logger.warning("Telegram отвечает 409 Conflict: этим токеном уже "
+                                + "пользуется другой процесс — другой плагин (например, мост "
+                                + "SNTelegram) или второй сервер. У каждого плагина должен "
+                                + "быть СВОЙ бот: создай второго бота у @BotFather, впиши его "
+                                + "токен в config.yml SNSocial и сделай его админом канала. "
+                                + "Пока токен общий, коды привязки будут теряться.");
+                    } else {
+                        logger.warning("Telegram недоступен, повторяю каждые 10 секунд: "
+                                + message);
+                    }
                 }
                 if (!sleepQuietly(10_000)) {
                     return;
