@@ -1,0 +1,95 @@
+# SNSocial — русские тексты. Формат: ключ=значение, всё после первого «=» берётся как есть.
+# Разметка — MiniMessage (docs.advntr.dev/minimessage). Ключи bot.* уходят в Telegram/VK
+# как обычный текст — разметку туда не писать.
+# Чтобы поменять строку: скопируй её в plugins/SNSocial/messages-ru.txt и правь там.
+
+prefix=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray>
+
+# ---------------------------------------------------------------- слова и сети
+word.yes=да
+word.no=нет
+word.unknown=не удалось проверить
+network.telegram=Telegram
+network.vk=ВКонтакте
+time.days=д
+time.hours=ч
+time.minutes=мин
+time.seconds=сек
+
+# ---------------------------------------------------------------- команды
+cmd.usage=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Команды: <white>/snsocial</white> — награды, <white>/snsocial link telegram|vk</white> — привязка, <white>/snsocial status</white> — статус.</gray>
+cmd.players-only=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Эта команда — для игроков в игре.</red>
+cmd.no-permission=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Недостаточно прав.</red>
+cmd.version=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Версия <white>{version}</white>. Канал автора: <aqua>t.me/somikyy</aqua></gray>
+
+# ---------------------------------------------------------------- привязка
+link.usage=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Использование: <white>/snsocial link telegram</white> или <white>/snsocial link vk</white></gray>
+link.disabled=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>{network} на этом сервере не настроен.</red>
+link.already=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>{network} уже привязан. Отвязать: <white>/snsocial unlink</white></yellow>
+link.telegram.not-ready=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Telegram-бот пока не отвечает. Попробуй через минуту или сообщи админу.</red>
+link.telegram.instructions=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Твой код: <white><bold>{code}</bold></white>. <click:open_url:'{url}'><hover:show_text:'Открыть чат с ботом'><aqua><u>Нажми сюда</u></aqua></hover></click><gray>, чтобы открыть бота, и отправь ему код. Код живёт 10 минут.</gray>
+link.vk.instructions=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Твой код: <white><bold>{code}</bold></white>. <click:open_url:'{url}'><hover:show_text:'Открыть сообщения группы'><aqua><u>Нажми сюда</u></aqua></hover></click><gray> и отправь код в сообщения группы. Код живёт 10 минут.</gray>
+link.success.game=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Аккаунт привязан! Смотри награды: <white>/snsocial</white></green>
+
+unlink.usage=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Использование: <white>/snsocial unlink telegram</white> или <white>/snsocial unlink vk</white></gray>
+unlink.confirm=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Отвязать {network}? История наград сохранится и повторно их получить не выйдет. Повтори команду в течение 30 секунд для подтверждения.</yellow>
+unlink.not-linked=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>{network} не привязан.</red>
+unlink.done=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>{network} отвязан.</green>
+
+# ---------------------------------------------------------------- награды
+claim.success=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Награда получена: {reward}<green>!</green>
+claim.need-link=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Сначала привяжи: {networks}. Команда: <white>/snsocial link</white></yellow>
+claim.need-subscribe=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Подписка не найдена: {networks}. Подпишись и попробуй снова.</yellow>
+claim.check-failed=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Не получилось проверить подписку — попробуй через минуту.</red>
+claim.already=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Эта награда уже получена.</yellow>
+claim.cooldown=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Ещё рано. Следующая выдача через <white>{time}</white>.</yellow>
+claim.locked=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Награда недоступна: она была откатана после отписки.</red>
+claim.unknown-reward=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Нет такой награды. Список — в /snsocial</red>
+claim.storage-error=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Внутренняя ошибка, попробуй позже. Подробности — в консоли сервера.</red>
+revoke.notify=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Награда {reward} <red>откатана: подписка не подтвердилась.</red>
+
+# ---------------------------------------------------------------- статус
+status.header=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Твои привязки:</gray>
+status.line=<dark_gray>  •</dark_gray> <white>{network}</white><gray>: привязан — <white>{linked}</white>, подписка — <white>{subscribed}</white></gray>
+
+# ---------------------------------------------------------------- GUI
+gui.title=<#1a1a2e>Награды за подписку</#1a1a2e>
+gui.item-name={name}
+gui.item-lore-line={line}
+gui.state.available=<green>▶ Нажми, чтобы получить!</green>
+gui.state.claimed=<dark_green>✔ Получено</dark_green>
+gui.state.need-link=<yellow>⚠ Нужна привязка: {networks}</yellow>
+gui.state.need-subscribe=<yellow>⚠ Нужна подписка: {networks}</yellow>
+gui.state.check-failed=<red>✖ Проверка не удалась, попробуй позже</red>
+gui.state.cooldown=<gold>⌛ Через {time}</gold>
+gui.state.locked=<red>✖ Откатана после отписки</red>
+gui.info.name=<aqua>Мои привязки</aqua>
+gui.info.line=<gray>{network}: привязан — <white>{linked}</white>, подписка — <white>{subscribed}</white></gray>
+gui.info.hint=<gray>Привязка: <white>/snsocial link telegram</white> или <white>/snsocial link vk</white></gray>
+
+# ------------------------------------------------- ответы ботов (без разметки!)
+bot.linked=Готово! Аккаунт привязан к игроку {player}. Награды ждут в игре: /snsocial
+bot.conflict=Этот аккаунт уже привязан к игроку {player}. Один аккаунт — один игрок.
+bot.bad-code=Привет! Я выдаю награды за подписку. Зайди на сервер, набери /snsocial link — и пришли мне код из игры.
+bot.storage-error=Не получилось сохранить привязку. Попробуй ещё раз через минуту.
+
+# ---------------------------------------------------------------- админ
+admin.player-not-found=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Игрок не найден. Он заходил на сервер?</red>
+admin.not-linked=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>У игрока {player} нет привязок.</yellow>
+admin.check.started=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Проверяю подписки игрока <white>{player}</white>…</gray>
+admin.check.done=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Проверка {player} завершена:</green>
+admin.info.header=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Игрок <white>{player}</white>:</gray>
+admin.info.telegram=<dark_gray>  •</dark_gray> <gray>Telegram ID: <white>{value}</white></gray>
+admin.info.vk=<dark_gray>  •</dark_gray> <gray>VK ID: <white>{value}</white></gray>
+admin.info.claim=<dark_gray>  •</dark_gray> <gray>Награда <white>{reward}</white>: выдана {count} раз, {state}</gray>
+admin.info.claim-active=активна
+admin.info.claim-revoked=откатана
+admin.reload.done=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Конфиг перезагружен, все сервисы перезапущены.</green>
+admin.import.usage=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Использование: <white>/snsocial import fmsocialreward [id_награды]</white></gray>
+admin.import.not-found=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Не нашёл plugins/fmSocialReward/config.yml — нечего импортировать.</red>
+admin.import.no-reward=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Не понял, в какую награду импортировать: укажи id награды типа subscribe.</red>
+admin.import.done=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Импорт в награду <white>{reward}</white>: перенесено <white>{imported}</white>, уже были <white>{already}</white>, не распознано <white>{skipped}</white>.</green>
+admin.import.failed=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Импорт не удался. Подробности — в консоли.</red>
+
+# ---------------------------------------------------------------- разное
+update.available=Доступна новая версия SNSocial: {latest} (у тебя {current}). Скачать: github.com/Somikyy/SNSocial/releases

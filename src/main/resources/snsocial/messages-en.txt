@@ -1,0 +1,95 @@
+# SNSocial — English texts. Format: key=value, everything after the first "=" is literal.
+# Markup is MiniMessage (docs.advntr.dev/minimessage). The bot.* keys go to Telegram/VK
+# as plain text — no markup there.
+# To change a line: copy it into plugins/SNSocial/messages-en.txt and edit it there.
+
+prefix=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray>
+
+# ---------------------------------------------------------------- words and networks
+word.yes=yes
+word.no=no
+word.unknown=could not check
+network.telegram=Telegram
+network.vk=VK
+time.days=d
+time.hours=h
+time.minutes=min
+time.seconds=sec
+
+# ---------------------------------------------------------------- commands
+cmd.usage=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Commands: <white>/snsocial</white> — rewards, <white>/snsocial link telegram|vk</white> — link, <white>/snsocial status</white> — status.</gray>
+cmd.players-only=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>This command is for in-game players.</red>
+cmd.no-permission=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>You do not have permission.</red>
+cmd.version=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Version <white>{version}</white>. Author's channel: <aqua>t.me/somikyy</aqua></gray>
+
+# ---------------------------------------------------------------- linking
+link.usage=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Usage: <white>/snsocial link telegram</white> or <white>/snsocial link vk</white></gray>
+link.disabled=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>{network} is not configured on this server.</red>
+link.already=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>{network} is already linked. Unlink: <white>/snsocial unlink</white></yellow>
+link.telegram.not-ready=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>The Telegram bot is not responding yet. Try again in a minute or tell an admin.</red>
+link.telegram.instructions=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Your code: <white><bold>{code}</bold></white>. <click:open_url:'{url}'><hover:show_text:'Open the bot chat'><aqua><u>Click here</u></aqua></hover></click><gray> to open the bot and send it the code. The code lives 10 minutes.</gray>
+link.vk.instructions=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Your code: <white><bold>{code}</bold></white>. <click:open_url:'{url}'><hover:show_text:'Open the group messages'><aqua><u>Click here</u></aqua></hover></click><gray> and send the code to the group messages. The code lives 10 minutes.</gray>
+link.success.game=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Account linked! See your rewards: <white>/snsocial</white></green>
+
+unlink.usage=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Usage: <white>/snsocial unlink telegram</white> or <white>/snsocial unlink vk</white></gray>
+unlink.confirm=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Unlink {network}? Reward history stays and one-time rewards will not be claimable again. Repeat the command within 30 seconds to confirm.</yellow>
+unlink.not-linked=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>{network} is not linked.</red>
+unlink.done=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>{network} unlinked.</green>
+
+# ---------------------------------------------------------------- rewards
+claim.success=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Reward received: {reward}<green>!</green>
+claim.need-link=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Link first: {networks}. Command: <white>/snsocial link</white></yellow>
+claim.need-subscribe=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Subscription not found: {networks}. Subscribe and try again.</yellow>
+claim.check-failed=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Could not verify the subscription — try again in a minute.</red>
+claim.already=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>This reward is already claimed.</yellow>
+claim.cooldown=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Not yet. Next claim in <white>{time}</white>.</yellow>
+claim.locked=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Unavailable: this reward was rolled back after an unsubscribe.</red>
+claim.unknown-reward=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>No such reward. The list is in /snsocial</red>
+claim.storage-error=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Internal error, try later. Details are in the server console.</red>
+revoke.notify=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Reward {reward} <red>was rolled back: the subscription did not check out.</red>
+
+# ---------------------------------------------------------------- status
+status.header=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Your links:</gray>
+status.line=<dark_gray>  •</dark_gray> <white>{network}</white><gray>: linked — <white>{linked}</white>, subscribed — <white>{subscribed}</white></gray>
+
+# ---------------------------------------------------------------- GUI
+gui.title=<#1a1a2e>Subscription rewards</#1a1a2e>
+gui.item-name={name}
+gui.item-lore-line={line}
+gui.state.available=<green>▶ Click to claim!</green>
+gui.state.claimed=<dark_green>✔ Claimed</dark_green>
+gui.state.need-link=<yellow>⚠ Link required: {networks}</yellow>
+gui.state.need-subscribe=<yellow>⚠ Subscription required: {networks}</yellow>
+gui.state.check-failed=<red>✖ Check failed, try again later</red>
+gui.state.cooldown=<gold>⌛ In {time}</gold>
+gui.state.locked=<red>✖ Rolled back after unsubscribe</red>
+gui.info.name=<aqua>My links</aqua>
+gui.info.line=<gray>{network}: linked — <white>{linked}</white>, subscribed — <white>{subscribed}</white></gray>
+gui.info.hint=<gray>Link: <white>/snsocial link telegram</white> or <white>/snsocial link vk</white></gray>
+
+# ------------------------------------------------- bot replies (no markup!)
+bot.linked=Done! The account is now linked to player {player}. Rewards await in game: /snsocial
+bot.conflict=This account is already linked to player {player}. One account — one player.
+bot.bad-code=Hi! I hand out subscription rewards. Join the server, run /snsocial link — and send me the code from the game.
+bot.storage-error=Could not save the link. Please try again in a minute.
+
+# ---------------------------------------------------------------- admin
+admin.player-not-found=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Player not found. Have they ever joined?</red>
+admin.not-linked=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <yellow>Player {player} has no links.</yellow>
+admin.check.started=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Checking subscriptions of <white>{player}</white>…</gray>
+admin.check.done=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Check of {player} finished:</green>
+admin.info.header=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Player <white>{player}</white>:</gray>
+admin.info.telegram=<dark_gray>  •</dark_gray> <gray>Telegram ID: <white>{value}</white></gray>
+admin.info.vk=<dark_gray>  •</dark_gray> <gray>VK ID: <white>{value}</white></gray>
+admin.info.claim=<dark_gray>  •</dark_gray> <gray>Reward <white>{reward}</white>: granted {count} time(s), {state}</gray>
+admin.info.claim-active=active
+admin.info.claim-revoked=revoked
+admin.reload.done=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Config reloaded, all services restarted.</green>
+admin.import.usage=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <gray>Usage: <white>/snsocial import fmsocialreward [reward_id]</white></gray>
+admin.import.not-found=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>plugins/fmSocialReward/config.yml not found — nothing to import.</red>
+admin.import.no-reward=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Could not pick a target reward: name a subscribe-type reward id.</red>
+admin.import.done=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <green>Import into <white>{reward}</white>: imported <white>{imported}</white>, already had it <white>{already}</white>, unrecognized <white>{skipped}</white>.</green>
+admin.import.failed=<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> <red>Import failed. Details are in the console.</red>
+
+# ---------------------------------------------------------------- misc
+update.available=A new SNSocial version is available: {latest} (you have {current}). Download: github.com/Somikyy/SNSocial/releases

@@ -1,0 +1,69 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Both builds below must use the SAME JDK: the stub check compares the bytecode they
+      # produce, and two different javac versions would show up as differences that mean
+      # nothing. paper-api 1.20.1 is published for Java 17, so 17 is enough here.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # The offline path is the source of truth for behaviour: it needs no network, so a
+      # repo.papermc.io outage can never turn CI red for the wrong reason. It also needs
+      # nothing beyond the JDK and bash, which is why it is the same command a contributor
+      # runs on their own machine.
+      - name: Build and self-test (offline)
+        run: bash tools/offline/verify.sh
+
+      - name: Install Gradle
+        id: gradle_setup
+        continue-on-error: true
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10'
+
+      # Needs the network, so it is allowed to fail; the check below simply does not run then.
+      - name: Gradle build against the real paper-api
+        id: gradle_build
+        if: steps.gradle_setup.outcome == 'success'
+        continue-on-error: true
+        run: gradle build --no-daemon
+
+      # THE important check. The offline build compiles against hand-written stubs, and a stub
+      # whose signature differs from the real Bukkit one is invisible at compile time: the
+      # return type is part of the JVM method descriptor, so a stub returning Object where the
+      # server returns Inventory produces a jar that asks for a method nobody has, and the
+      # plugin dies with NoSuchMethodError the first time that line runs.
+      #
+      # Same sources, same JDK, two different sets of API class files: any difference here
+      # is a stub that lies. This one is blocking.
+      - name: Stubs must match the real Paper API
+        if: steps.gradle_build.outcome == 'success'
+        run: |
+          bash tools/offline/api-surface.sh build/offline/classes --all > /tmp/from-stubs.txt
+          bash tools/offline/api-surface.sh build/classes/java/main --all > /tmp/from-paper.txt
+          if ! diff -u /tmp/from-stubs.txt /tmp/from-paper.txt; then
+            echo "::error::tools/offline/bukkit-stubs disagrees with the real paper-api - the offline jar would throw NoSuchMethodError at runtime"
+            exit 1
+          fi
+          echo "stubs agree with paper-api"
+
+      - name: Report that the stub check was skipped
+        if: steps.gradle_build.outcome != 'success'
+        run: echo "::warning::Gradle build did not run, so the stubs were not checked against the real paper-api"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SNSocial-jar
+          path: build/offline/jar/SNSocial-*.jar

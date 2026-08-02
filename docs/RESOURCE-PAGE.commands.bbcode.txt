@@ -1,0 +1,31 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  КОМАНДЫ И ПРАВА — отдельное поле «Команды/Права» на spigotmc.ru             ║
+║  Если вставляешь это поле, удали секцию «Команды и права» из тела страницы.  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+[SIZE=5][B]Команды[/B][/SIZE]
+
+[TABLE]
+[TR][TH]Команда[/TH][TH]Что делает[/TH][/TR]
+[TR][TD]/snsocial[/TD][TD]Открыть GUI наград[/TD][/TR]
+[TR][TD]/snsocial link telegram[/TD][TD]Код привязки Telegram (кликабельная ссылка на бота)[/TD][/TR]
+[TR][TD]/snsocial link vk[/TD][TD]Код привязки VK (отправить в сообщения группы)[/TD][/TR]
+[TR][TD]/snsocial unlink telegram|vk[/TD][TD]Отвязать аккаунт — повтор команды в течение 30 секунд для подтверждения[/TD][/TR]
+[TR][TD]/snsocial claim <id>[/TD][TD]Забрать награду без GUI[/TD][/TR]
+[TR][TD]/snsocial status[/TD][TD]Свои привязки и статусы подписок[/TD][/TR]
+[TR][TD]/snsocial check <игрок>[/TD][TD]Форс-перепроверка подписок игрока[/TD][/TR]
+[TR][TD]/snsocial info <игрок>[/TD][TD]Привязки и полученные награды игрока[/TD][/TR]
+[TR][TD]/snsocial reload[/TD][TD]Перезагрузить config.yml и тексты без рестарта[/TD][/TR]
+[TR][TD]/snsocial import fmsocialreward [id_награды][/TD][TD]Импорт выданных наград из fmSocialReward[/TD][/TR]
+[TR][TD]/snsocial version[/TD][TD]Версия плагина[/TD][/TR]
+[/TABLE]
+
+Алиасы: [ICODE]/social[/ICODE], [ICODE]/sns[/ICODE], [ICODE]/снс[/ICODE]
+
+[SIZE=5][B]Права[/B][/SIZE]
+
+[TABLE]
+[TR][TH]Право[/TH][TH]По умолчанию[/TH][TH]Открывает[/TH][/TR]
+[TR][TD]snsocial.use[/TD][TD]у всех[/TD][TD]GUI, link, unlink, claim, status[/TD][/TR]
+[TR][TD]snsocial.admin[/TD][TD]только op[/TD][TD]check, info, reload, import, version[/TD][/TR]
+[/TABLE]

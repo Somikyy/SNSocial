@@ -1,0 +1,28 @@
+name: SNSocial
+version: '${version}'
+main: network.somikyy.snsocial.bukkit.SNSocialPlugin
+api-version: '1.20'
+# Стоит false честно: код написан на Folia-совместимых планировщиках
+# (GlobalRegionScheduler, EntityScheduler), но на реальной Folia пока не проверен.
+# Флаг включится после реального теста, а не после «должно работать».
+folia-supported: false
+description: 'Награды за подписку на Telegram-канал и группу ВКонтакте.'
+website: 'https://t.me/somikyy'
+authors: [ Somikyy ]
+softdepend: [ PlaceholderAPI ]
+load: POSTWORLD
+
+commands:
+  snsocial:
+    description: Награды за подписку на Telegram и VK
+    aliases: [ social, sns, снс ]
+    usage: /snsocial [link|unlink|claim|status|check|info|reload|import|version]
+    permission: snsocial.use
+
+permissions:
+  snsocial.use:
+    description: GUI, привязка аккаунтов, получение наград
+    default: true
+  snsocial.admin:
+    description: Админ-команды - check, info, reload, import, version
+    default: op
