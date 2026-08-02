@@ -34,8 +34,13 @@ final class VkPoller implements Runnable {
     /** Called with (player uuid, player name) after a successful link, off the game thread. */
     private final BiConsumer<java.util.UUID, String> onLinked;
 
+    /** Re-log the same error this often, so a misconfig noticed at night is still explained
+     *  in the morning's console without producing a thousand identical lines in between. */
+    private static final long ERROR_LOG_INTERVAL_MILLIS = 5 * 60_000;
+
     private volatile boolean running = true;
     private String lastError;
+    private long lastErrorLoggedAt;
 
     VkPoller(Logger logger, Texts texts, VkApi api, LinkService linkService,
              BiConsumer<java.util.UUID, String> onLinked) {
@@ -61,7 +66,6 @@ final class VkPoller implements Runnable {
                     ts = server.ts();
                 }
                 VkApi.PollResult result = api.poll(server, ts, 25);
-                lastError = null;
                 if (result.failed() == 1) {
                     // ts fell behind; the response carries the one to continue from.
                     ts = result.ts() != null ? result.ts() : ts;
@@ -86,9 +90,12 @@ final class VkPoller implements Runnable {
                 return;
             } catch (IOException e) {
                 String message = String.valueOf(e.getMessage());
-                if (!message.equals(lastError)) {
+                long now = System.currentTimeMillis();
+                if (!message.equals(lastError)
+                        || now - lastErrorLoggedAt > ERROR_LOG_INTERVAL_MILLIS) {
                     lastError = message;
-                    logger.warning("VK недоступен, повторяю каждые 10 секунд: " + message);
+                    lastErrorLoggedAt = now;
+                    logger.warning(explain(message));
                 }
                 server = null;
                 if (!sleepQuietly(10_000)) {
@@ -96,6 +103,26 @@ final class VkPoller implements Runnable {
                 }
             }
         }
+    }
+
+    /**
+     * VK's error texts are accurate but English and API-speak; the two that every admin
+     * hits during setup deserve a Russian sentence with the exact settings path. Both
+     * observed on the very first live install (02.08.2026).
+     */
+    private static String explain(String message) {
+        if (message.contains("longpoll for this group is not enabled")) {
+            return "VK: в сообществе не включён Long Poll API — плагин не может получать "
+                    + "сообщения группы, коды привязки не доходят. Включи: Управление → "
+                    + "Работа с API → Long Poll API → «Включено», версия 5.199, и на вкладке "
+                    + "«Типы событий» отметь «Входящее сообщение». Плагин переподключится сам.";
+        }
+        if (message.contains("Access denied") || message.contains("error 27")) {
+            return "VK: ключу доступа не хватает прав. Пересоздай ключ сообщества с правами "
+                    + "«управление сообществом» (нужно для Long Poll) и «сообщения сообщества» "
+                    + "(чтобы бот отвечал) и впиши его в vk.group-token. Ошибка VK: " + message;
+        }
+        return "VK недоступен, повторяю каждые 10 секунд: " + message;
     }
 
     private void handle(VkApi.VkMessage message, long now) {
