@@ -44,6 +44,11 @@ final class TelegramPoller implements Runnable {
     private volatile boolean running = true;
     private String lastError;
     private long lastErrorLoggedAt;
+    /** Positive feedback: silence after an error reads as "still broken"; say when it works.
+     *  Rate-limited like the errors - a flapping token conflict alternates success and 409
+     *  every few seconds, and an honest "восстановлена" each time is just spam in green. */
+    private boolean failing;
+    private long lastRestoreLoggedAt;
 
     TelegramPoller(Logger logger, Texts texts, TelegramApi api, LinkService linkService,
                    long codeTtlMillis, BiConsumer<java.util.UUID, String> onLinked) {
@@ -70,6 +75,13 @@ final class TelegramPoller implements Runnable {
                 // success and 409 alternate, and clearing on success would re-arm the log
                 // for every flap. The 5-minute reminder covers the recovered-then-broke case.
                 long now = System.currentTimeMillis();
+                if (failing) {
+                    failing = false;
+                    if (now - lastRestoreLoggedAt > ERROR_LOG_INTERVAL_MILLIS) {
+                        lastRestoreLoggedAt = now;
+                        logger.info("Telegram: связь восстановлена, бот принимает сообщения.");
+                    }
+                }
                 for (TelegramApi.Update update : batch.messages()) {
                     if (update.dateSeconds() * 1000L < now - codeTtlMillis) {
                         continue;
@@ -80,6 +92,7 @@ final class TelegramPoller implements Runnable {
                 Thread.currentThread().interrupt();
                 return;
             } catch (IOException e) {
+                failing = true;
                 // Log each distinct failure once (with a periodic reminder), then go quiet:
                 // a dead token during a long night must not produce four thousand identical
                 // lines. The periodic part matters for the flapping case below, where

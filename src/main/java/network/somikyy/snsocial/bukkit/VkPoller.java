@@ -41,6 +41,11 @@ final class VkPoller implements Runnable {
     private volatile boolean running = true;
     private String lastError;
     private long lastErrorLoggedAt;
+    /** Positive feedback: silence after an error reads as "still broken"; say when it works.
+     *  Rate-limited like the errors, so a flapping connection does not spam in green. */
+    private boolean everConnected;
+    private boolean failing;
+    private long lastRestoreLoggedAt;
 
     VkPoller(Logger logger, Texts texts, VkApi api, LinkService linkService,
              BiConsumer<java.util.UUID, String> onLinked) {
@@ -64,6 +69,17 @@ final class VkPoller implements Runnable {
                 if (server == null) {
                     server = api.getLongPollServer();
                     ts = server.ts();
+                    if (!everConnected || failing) {
+                        long now = System.currentTimeMillis();
+                        if (!everConnected
+                                || now - lastRestoreLoggedAt > ERROR_LOG_INTERVAL_MILLIS) {
+                            lastRestoreLoggedAt = now;
+                            logger.info("VK: Long Poll подключён, сообщения сообщества "
+                                    + "принимаются.");
+                        }
+                        everConnected = true;
+                        failing = false;
+                    }
                 }
                 VkApi.PollResult result = api.poll(server, ts, 25);
                 if (result.failed() == 1) {
@@ -89,6 +105,7 @@ final class VkPoller implements Runnable {
                 Thread.currentThread().interrupt();
                 return;
             } catch (IOException e) {
+                failing = true;
                 String message = String.valueOf(e.getMessage());
                 long now = System.currentTimeMillis();
                 if (!message.equals(lastError)
@@ -112,10 +129,13 @@ final class VkPoller implements Runnable {
      */
     private static String explain(String message) {
         if (message.contains("longpoll for this group is not enabled")) {
-            return "VK: в сообществе не включён Long Poll API — плагин не может получать "
-                    + "сообщения группы, коды привязки не доходят. Включи: Управление → "
-                    + "Работа с API → Long Poll API → «Включено», версия 5.199, и на вкладке "
-                    + "«Типы событий» отметь «Входящее сообщение». Плагин переподключится сам.";
+            return "VK: для группы из vk.group-id не включён Long Poll — плагин не может "
+                    + "получать сообщения, коды привязки не доходят. Проверь три вещи: "
+                    + "1) включена именно вкладка «Long Poll API» (не Callback API!) с "
+                    + "версией 5.199 и событием «Входящее сообщение»; 2) vk.group-id — "
+                    + "числовой ID ИМЕННО этого сообщества (vk.com/club<ID>); 3) ключ создан "
+                    + "в этом же сообществе. Плагин переподключится сам и напишет "
+                    + "«Long Poll подключён», когда всё сойдётся.";
         }
         if (message.contains("Access denied") || message.contains("error 27")) {
             return "VK: ключу доступа не хватает прав. Пересоздай ключ сообщества с правами "
