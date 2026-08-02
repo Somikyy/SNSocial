@@ -204,8 +204,15 @@ public final class VkApi {
             if (!"message_new".equals(MiniJson.str(update, "type"))) {
                 continue;
             }
-            Map<String, Object> message =
-                    MiniJson.obj(MiniJson.obj(update, "object"), "message");
+            Map<String, Object> object = MiniJson.obj(update, "object");
+            Map<String, Object> message = MiniJson.obj(object, "message");
+            if (message == null) {
+                // Long Poll versions below 5.103 put the message fields straight into
+                // "object", without the message/client_info wrapper. The version comes from
+                // a dropdown in the community settings, i.e. from the admin, not from us -
+                // seen on the first live install. Both shapes carry the same fields.
+                message = object;
+            }
             if (message == null) {
                 continue;
             }

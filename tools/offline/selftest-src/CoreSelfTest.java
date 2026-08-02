@@ -229,6 +229,16 @@ public final class CoreSelfTest {
                         && "ABC234".equals(result.messages().get(0).text()));
         check("vk lp: ts advances", "8".equals(result.ts()));
 
+        // Long Poll below 5.103: message fields sit straight in "object", no wrapper.
+        // The version is a dropdown in the community settings - the admin's choice, not ours.
+        VkApi.PollResult legacy = VkApi.parsePoll("{\"ts\":\"12\",\"updates\":["
+                + "{\"type\":\"message_new\",\"object\":{\"from_id\":555,\"peer_id\":555,"
+                + "\"text\":\"CRRE25\"}}]}");
+        check("vk lp: pre-5.103 event shape still parses",
+                legacy.messages().size() == 1
+                        && legacy.messages().get(0).fromId() == 555
+                        && "CRRE25".equals(legacy.messages().get(0).text()));
+
         check("vk lp: failed:1 keeps new ts",
                 VkApi.parsePoll("{\"failed\":1,\"ts\":9}").failed() == 1);
         check("vk lp: failed:2 demands a new server",
