@@ -18,7 +18,7 @@ package network.somikyy.snsocial.core;
  */
 public final class Version {
 
-    public static final String VERSION = "26.8.1";
+    public static final String VERSION = "26.9.0";
 
     private Version() {
     }

@@ -134,9 +134,9 @@ $ bash tools/offline/verify.sh
 ==> stubs
 ==> sources
 ==> resources
-    version 26.8.1
+    version 26.9.0
 ==> jar
-OK: build/offline/jar/SNSocial-26.8.1.jar
+OK: build/offline/jar/SNSocial-26.9.0.jar
 ==> compile self-test
 ==> layering invariant: core/ must not know Bukkit exists
     core is clean
