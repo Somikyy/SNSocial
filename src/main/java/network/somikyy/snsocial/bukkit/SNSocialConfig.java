@@ -9,6 +9,7 @@
  */
 package network.somikyy.snsocial.bukkit;
 
+import network.somikyy.snsocial.core.Colors;
 import network.somikyy.snsocial.core.Network;
 import network.somikyy.snsocial.core.RewardDef;
 import org.bukkit.configuration.ConfigurationSection;
@@ -144,8 +145,14 @@ record SNSocialConfig(
                 section.getStringList("revoke-commands"),
                 section.getBoolean("reclaimable", false),
                 section.getBoolean("auto-claim", false),
-                section.getString("display-name", id),
-                section.getStringList("description"),
+                // The reward title and its lore are the admin's own markup, exactly like a line
+                // of messages.yml, so they understand the same four colour notations. Converted
+                // here rather than in Texts because these arrive as placeholder VALUES, and
+                // Texts deliberately converts templates only - see its class comment.
+                Colors.toMiniMessage(section.getString("display-name", id)),
+                section.getStringList("description").stream()
+                        .map(Colors::toMiniMessage)
+                        .toList(),
                 section.getString("icon", "CHEST"),
                 section.getInt("slot", -1));
     }

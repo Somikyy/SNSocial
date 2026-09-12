@@ -95,9 +95,18 @@ public final class SNSocialPlugin extends JavaPlugin {
         for (String warning : cfg.warnings()) {
             getLogger().warning(warning);
         }
-        texts = new Texts(Messages.load(
-                new File(getDataFolder(), "messages-ru.txt").toPath(),
-                new File(getDataFolder(), "messages-en.txt").toPath()), cfg.russian());
+        // messages.yml is written once and then left alone, so it has to be written before it
+        // is read: an admin who edits it on a running server gets their file back on /reload,
+        // never a fresh copy over the top of their work.
+        for (String line : Messages.install(getDataFolder().toPath(), cfg.russian())) {
+            getLogger().info(line);
+        }
+        Messages messages = Messages.load(new File(getDataFolder(), "messages.yml").toPath());
+        String languageNotice = messages.languageMismatch(cfg.russian());
+        if (languageNotice != null) {
+            getLogger().warning(languageNotice);
+        }
+        texts = new Texts(messages, cfg.russian());
         cache = new StatusCache();
         codes = new LinkCodeService(cfg.codeTtlMinutes() * 60_000L);
         placeholderData = new PlaceholderData();

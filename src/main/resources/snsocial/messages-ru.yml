@@ -1,0 +1,151 @@
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │  SNSocial — все тексты плагина. Правьте свободно, плагин ничего не           │
+# │  перезаписывает: этот файл ваш с момента первого запуска.                    │
+# │                                                                              │
+# │  После правки — /snsocial reload. Ключ, который вы удалили или испортили,    │
+# │  берётся из встроенного набора: сломать плагин этим файлом нельзя.           │
+# └──────────────────────────────────────────────────────────────────────────────┘
+#
+# ЦВЕТА. Пишите как привыкли — понимаются все четыре записи сразу:
+#   &c  &l  &r              — обычные коды (§ тоже работает);
+#   &#7B2FFF                — HEX, короткая запись;
+#   &x&7&B&2&F&F&F          — HEX, длинная запись из конфигов эпохи Spigot;
+#   <red> <#7B2FFF>         — MiniMessage, вместе с <gradient>, <bold>, <click>.
+# Тонкость: если в строке нет ни одного тега <...>, цветовой код гасит жирный и
+# курсив — ровно как в старом чате. Если теги есть, вы уже пишете на MiniMessage,
+# и коды просто переводятся в теги, ничего не закрывая за вашей спиной.
+#
+# ЗНАЧЕНИЯ — в одинарных кавычках. Апостроф внутри удваивается: 'это ''так'''.
+# Перенос строки: <newline> в игровых текстах, \n в текстах бота.
+# ПОДСТАНОВКИ вида {player}, {reward}, {code} заменяются плагином — не трогайте их.
+#
+# КЛЮЧИ bot.* уходят в Telegram и VK обычным текстом. Разметку там можно писать,
+# но она будет вырезана: мессенджеры её не рисуют.
+
+messages-version: 1
+
+# Язык, на котором написан этот файл. Плагин сверяет его с general.language из
+# config.yml и предупреждает в консоли, если они разошлись: тексты всё равно
+# берутся отсюда. Сменить язык — это поменять general.language и удалить этот
+# файл, чтобы он создался заново; правка строки ниже ничего не переводит.
+language: ru
+
+# Приписка в начале каждой строки в чате. Чтобы убрать название плагина
+# отовсюду разом — сделайте её пустой:  prefix: ''
+prefix: '<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> '
+
+# ---------- слова и сети
+word:
+  'yes': 'да'
+  'no': 'нет'
+  unknown: 'не удалось проверить'
+network:
+  telegram: 'Telegram'
+  vk: 'ВКонтакте'
+
+# ---------- команды
+cmd:
+  usage: '{prefix}<gray>Команды: <white>/snsocial</white> — награды, <white>/snsocial link telegram|vk</white> — привязка, <white>/snsocial status</white> — статус.</gray>'
+  players-only: '{prefix}<red>Эта команда — для игроков в игре.</red>'
+  no-permission: '{prefix}<red>Недостаточно прав.</red>'
+  version: '{prefix}<gray>Версия <white>{version}</white>. Канал автора: <aqua>t.me/somikyy</aqua></gray>'
+
+# ---------- привязка
+link:
+  usage: '{prefix}<gray>Использование: <white>/snsocial link telegram</white> или <white>/snsocial link vk</white></gray>'
+  disabled: '{prefix}<red>{network} на этом сервере не настроен.</red>'
+  already: '{prefix}<yellow>{network} уже привязан. Отвязать: <white>/snsocial unlink</white></yellow>'
+  telegram:
+    not-ready: '{prefix}<red>Telegram-бот пока не отвечает. Попробуй через минуту или сообщи админу.</red>'
+    instructions: '{prefix}<gray>Твой код: <white><bold>{code}</bold></white>. <click:open_url:''{url}''><hover:show_text:''Открыть чат с ботом''><aqua><u>Нажми сюда</u></aqua></hover></click><gray>, чтобы открыть бота, и отправь ему код. Код живёт 10 минут.</gray>'
+  vk:
+    instructions: '{prefix}<gray>Твой код: <white><bold>{code}</bold></white>. <click:open_url:''{url}''><hover:show_text:''Открыть сообщения группы''><aqua><u>Нажми сюда</u></aqua></hover></click><gray> и отправь код в сообщения группы. Код живёт 10 минут.</gray>'
+  success:
+    game: '{prefix}<green>Аккаунт привязан! Смотри награды: <white>/snsocial</white></green>'
+
+# ---------- отвязка
+unlink:
+  usage: '{prefix}<gray>Использование: <white>/snsocial unlink telegram</white> или <white>/snsocial unlink vk</white></gray>'
+  confirm: '{prefix}<yellow>Отвязать {network}? История наград сохранится и повторно их получить не выйдет. Повтори команду в течение 30 секунд для подтверждения.</yellow>'
+  not-linked: '{prefix}<red>{network} не привязан.</red>'
+  done: '{prefix}<green>{network} отвязан.</green>'
+
+# ---------- награды
+claim:
+  success: '{prefix}<green>Награда получена: {reward}<green>!</green>'
+  need-link: '{prefix}<yellow>Сначала привяжи: {networks}. Команда: <white>/snsocial link</white></yellow>'
+  need-subscribe: '{prefix}<yellow>Подписка не найдена: {networks}. Подпишись и попробуй снова.</yellow>'
+  check-failed: '{prefix}<red>Не получилось проверить подписку — попробуй через минуту.</red>'
+  already: '{prefix}<yellow>Эта награда уже получена.</yellow>'
+  cooldown: '{prefix}<yellow>Ещё рано. Следующая выдача через <white>{time}</white>.</yellow>'
+  locked: '{prefix}<red>Награда недоступна: она была откатана после отписки.</red>'
+  unknown-reward: '{prefix}<red>Нет такой награды. Список — в /snsocial</red>'
+  storage-error: '{prefix}<red>Внутренняя ошибка, попробуй позже. Подробности — в консоли сервера.</red>'
+revoke:
+  notify: '{prefix}<red>Награда {reward} <red>откатана: подписка не подтвердилась.</red>'
+
+# ---------- статус
+status:
+  header: '{prefix}<gray>Твои привязки:</gray>'
+  line: '<dark_gray>  •</dark_gray> <white>{network}</white><gray>: привязан — <white>{linked}</white>, подписка — <white>{subscribed}</white></gray>'
+
+# ---------- GUI
+# Названия и описания самих наград лежат не здесь, а в config.yml, в секции
+# rewards: там те же цвета, HEX в том числе.
+gui:
+  title: '<#1a1a2e>Награды за подписку</#1a1a2e>'
+  item-name: '{name}'
+  item-lore-line: '{line}'
+  state:
+    available: '<green>▶ Нажми, чтобы получить!</green>'
+    claimed: '<dark_green>✔ Получено</dark_green>'
+    need-link: '<yellow>⚠ Нужна привязка: {networks}</yellow>'
+    need-subscribe: '<yellow>⚠ Нужна подписка: {networks}</yellow>'
+    check-failed: '<red>✖ Проверка не удалась, попробуй позже</red>'
+    cooldown: '<gold>⌛ Через {time}</gold>'
+    locked: '<red>✖ Откатана после отписки</red>'
+  info:
+    name: '<aqua>Мои привязки</aqua>'
+    line: '<gray>{network}: привязан — <white>{linked}</white>, подписка — <white>{subscribed}</white></gray>'
+    hint: '<gray>Привязка: <white>/snsocial link telegram</white> или <white>/snsocial link vk</white></gray>'
+
+# ---------- ответы ботов (разметка тут вырезается)
+bot:
+  linked: 'Готово! Аккаунт привязан к игроку {player}. Награды ждут в игре: /snsocial'
+  conflict: 'Этот аккаунт уже привязан к игроку {player}. Один аккаунт — один игрок.'
+  bad-code: 'Привет! Я выдаю награды за подписку. Зайди на сервер, набери /snsocial link — и пришли мне код из игры.'
+  storage-error: 'Не получилось сохранить привязку. Попробуй ещё раз через минуту.'
+
+# ---------- админ
+admin:
+  player-not-found: '{prefix}<red>Игрок не найден. Он заходил на сервер?</red>'
+  not-linked: '{prefix}<yellow>У игрока {player} нет привязок.</yellow>'
+  check:
+    started: '{prefix}<gray>Проверяю подписки игрока <white>{player}</white>…</gray>'
+    done: '{prefix}<green>Проверка {player} завершена:</green>'
+  info:
+    header: '{prefix}<gray>Игрок <white>{player}</white>:</gray>'
+    telegram: '<dark_gray>  •</dark_gray> <gray>Telegram ID: <white>{value}</white></gray>'
+    vk: '<dark_gray>  •</dark_gray> <gray>VK ID: <white>{value}</white></gray>'
+    claim: '<dark_gray>  •</dark_gray> <gray>Награда <white>{reward}</white>: выдана {count} раз, {state}</gray>'
+    claim-active: 'активна'
+    claim-revoked: 'откатана'
+  reload:
+    done: '{prefix}<green>Конфиг перезагружен, все сервисы перезапущены.</green>'
+  import:
+    usage: '{prefix}<gray>Использование: <white>/snsocial import fmsocialreward [id_награды]</white></gray>'
+    not-found: '{prefix}<red>Не нашёл plugins/fmSocialReward/config.yml — нечего импортировать.</red>'
+    no-reward: '{prefix}<red>Не понял, в какую награду импортировать: укажи id награды типа subscribe.</red>'
+    done: '{prefix}<green>Импорт в награду <white>{reward}</white>: перенесено <white>{imported}</white>, уже были <white>{already}</white>, не распознано <white>{skipped}</white>.</green>'
+    failed: '{prefix}<red>Импорт не удался. Подробности — в консоли.</red>'
+
+# ---------- разное
+update:
+  available: 'Доступна новая версия SNSocial: {latest} (у тебя {current}). Скачать: github.com/Somikyy/SNSocial/releases'
+
+# ---------- время
+time:
+  days: 'д'
+  hours: 'ч'
+  minutes: 'мин'
+  seconds: 'сек'

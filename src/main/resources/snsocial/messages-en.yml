@@ -1,0 +1,152 @@
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │  SNSocial — every text the plugin prints. Edit freely: the plugin never      │
+# │  rewrites this file, it is yours from the first start.                       │
+# │                                                                              │
+# │  After editing — /snsocial reload. A key you deleted or broke falls back to  │
+# │  the bundled one: you cannot break the plugin with this file.                │
+# └──────────────────────────────────────────────────────────────────────────────┘
+#
+# COLOURS. Write them the way you already know — all four notations are understood,
+# mixed inside one line if you like:
+#   &c  &l  &r              — the classic codes (§ works too);
+#   &#7B2FFF                — HEX, short form;
+#   &x&7&B&2&F&F&F          — HEX, the long form from Spigot-era configs;
+#   <red> <#7B2FFF>         — MiniMessage, along with <gradient>, <bold>, <click>.
+# One subtlety: in a line with no <...> tag at all, a colour code also clears bold
+# and italic — exactly like old chat. In a line that has tags you are already
+# writing MiniMessage, so the codes simply become tags and close nothing of yours.
+#
+# VALUES are single-quoted. An apostrophe inside is doubled: 'it''s like this'.
+# Line break: <newline> in game texts, \n in bot texts.
+# PLACEHOLDERS like {player}, {reward}, {code} are filled by the plugin — leave them.
+#
+# The bot.* keys go to Telegram and VK as plain text. You may write markup there,
+# but it will be stripped: the messengers do not render it.
+
+messages-version: 1
+
+# The language this file is written in. The plugin compares it with general.language
+# from config.yml and warns in the console when the two disagree: the texts are taken
+# from here either way. Changing the language means changing general.language and
+# deleting this file so it is written again — editing the line below translates nothing.
+language: en
+
+# The tag in front of every chat line. To take the plugin name out of
+# everywhere at once — make it empty:  prefix: ''
+prefix: '<#7B2FFF>SN</#7B2FFF><#00E1FF>Social</#00E1FF> <dark_gray>»</dark_gray> '
+
+# ---------- words and networks
+word:
+  'yes': 'yes'
+  'no': 'no'
+  unknown: 'could not check'
+network:
+  telegram: 'Telegram'
+  vk: 'VK'
+
+# ---------- commands
+cmd:
+  usage: '{prefix}<gray>Commands: <white>/snsocial</white> — rewards, <white>/snsocial link telegram|vk</white> — link, <white>/snsocial status</white> — status.</gray>'
+  players-only: '{prefix}<red>This command is for in-game players.</red>'
+  no-permission: '{prefix}<red>You do not have permission.</red>'
+  version: '{prefix}<gray>Version <white>{version}</white>. Author''s channel: <aqua>t.me/somikyy</aqua></gray>'
+
+# ---------- linking
+link:
+  usage: '{prefix}<gray>Usage: <white>/snsocial link telegram</white> or <white>/snsocial link vk</white></gray>'
+  disabled: '{prefix}<red>{network} is not configured on this server.</red>'
+  already: '{prefix}<yellow>{network} is already linked. Unlink: <white>/snsocial unlink</white></yellow>'
+  telegram:
+    not-ready: '{prefix}<red>The Telegram bot is not responding yet. Try again in a minute or tell an admin.</red>'
+    instructions: '{prefix}<gray>Your code: <white><bold>{code}</bold></white>. <click:open_url:''{url}''><hover:show_text:''Open the bot chat''><aqua><u>Click here</u></aqua></hover></click><gray> to open the bot and send it the code. The code lives 10 minutes.</gray>'
+  vk:
+    instructions: '{prefix}<gray>Your code: <white><bold>{code}</bold></white>. <click:open_url:''{url}''><hover:show_text:''Open the group messages''><aqua><u>Click here</u></aqua></hover></click><gray> and send the code to the group messages. The code lives 10 minutes.</gray>'
+  success:
+    game: '{prefix}<green>Account linked! See your rewards: <white>/snsocial</white></green>'
+
+# ---------- unlinking
+unlink:
+  usage: '{prefix}<gray>Usage: <white>/snsocial unlink telegram</white> or <white>/snsocial unlink vk</white></gray>'
+  confirm: '{prefix}<yellow>Unlink {network}? Reward history stays and one-time rewards will not be claimable again. Repeat the command within 30 seconds to confirm.</yellow>'
+  not-linked: '{prefix}<red>{network} is not linked.</red>'
+  done: '{prefix}<green>{network} unlinked.</green>'
+
+# ---------- rewards
+claim:
+  success: '{prefix}<green>Reward received: {reward}<green>!</green>'
+  need-link: '{prefix}<yellow>Link first: {networks}. Command: <white>/snsocial link</white></yellow>'
+  need-subscribe: '{prefix}<yellow>Subscription not found: {networks}. Subscribe and try again.</yellow>'
+  check-failed: '{prefix}<red>Could not verify the subscription — try again in a minute.</red>'
+  already: '{prefix}<yellow>This reward is already claimed.</yellow>'
+  cooldown: '{prefix}<yellow>Not yet. Next claim in <white>{time}</white>.</yellow>'
+  locked: '{prefix}<red>Unavailable: this reward was rolled back after an unsubscribe.</red>'
+  unknown-reward: '{prefix}<red>No such reward. The list is in /snsocial</red>'
+  storage-error: '{prefix}<red>Internal error, try later. Details are in the server console.</red>'
+revoke:
+  notify: '{prefix}<red>Reward {reward} <red>was rolled back: the subscription did not check out.</red>'
+
+# ---------- status
+status:
+  header: '{prefix}<gray>Your links:</gray>'
+  line: '<dark_gray>  •</dark_gray> <white>{network}</white><gray>: linked — <white>{linked}</white>, subscribed — <white>{subscribed}</white></gray>'
+
+# ---------- GUI
+# The reward titles and descriptions live in config.yml, in the rewards section,
+# not here — the same colours work there, HEX included.
+gui:
+  title: '<#1a1a2e>Subscription rewards</#1a1a2e>'
+  item-name: '{name}'
+  item-lore-line: '{line}'
+  state:
+    available: '<green>▶ Click to claim!</green>'
+    claimed: '<dark_green>✔ Claimed</dark_green>'
+    need-link: '<yellow>⚠ Link required: {networks}</yellow>'
+    need-subscribe: '<yellow>⚠ Subscription required: {networks}</yellow>'
+    check-failed: '<red>✖ Check failed, try again later</red>'
+    cooldown: '<gold>⌛ In {time}</gold>'
+    locked: '<red>✖ Rolled back after unsubscribe</red>'
+  info:
+    name: '<aqua>My links</aqua>'
+    line: '<gray>{network}: linked — <white>{linked}</white>, subscribed — <white>{subscribed}</white></gray>'
+    hint: '<gray>Link: <white>/snsocial link telegram</white> or <white>/snsocial link vk</white></gray>'
+
+# ---------- bot replies (markup is stripped here)
+bot:
+  linked: 'Done! The account is now linked to player {player}. Rewards await in game: /snsocial'
+  conflict: 'This account is already linked to player {player}. One account — one player.'
+  bad-code: 'Hi! I hand out subscription rewards. Join the server, run /snsocial link — and send me the code from the game.'
+  storage-error: 'Could not save the link. Please try again in a minute.'
+
+# ---------- admin
+admin:
+  player-not-found: '{prefix}<red>Player not found. Have they ever joined?</red>'
+  not-linked: '{prefix}<yellow>Player {player} has no links.</yellow>'
+  check:
+    started: '{prefix}<gray>Checking subscriptions of <white>{player}</white>…</gray>'
+    done: '{prefix}<green>Check of {player} finished:</green>'
+  info:
+    header: '{prefix}<gray>Player <white>{player}</white>:</gray>'
+    telegram: '<dark_gray>  •</dark_gray> <gray>Telegram ID: <white>{value}</white></gray>'
+    vk: '<dark_gray>  •</dark_gray> <gray>VK ID: <white>{value}</white></gray>'
+    claim: '<dark_gray>  •</dark_gray> <gray>Reward <white>{reward}</white>: granted {count} time(s), {state}</gray>'
+    claim-active: 'active'
+    claim-revoked: 'revoked'
+  reload:
+    done: '{prefix}<green>Config reloaded, all services restarted.</green>'
+  import:
+    usage: '{prefix}<gray>Usage: <white>/snsocial import fmsocialreward [reward_id]</white></gray>'
+    not-found: '{prefix}<red>plugins/fmSocialReward/config.yml not found — nothing to import.</red>'
+    no-reward: '{prefix}<red>Could not pick a target reward: name a subscribe-type reward id.</red>'
+    done: '{prefix}<green>Import into <white>{reward}</white>: imported <white>{imported}</white>, already had it <white>{already}</white>, unrecognized <white>{skipped}</white>.</green>'
+    failed: '{prefix}<red>Import failed. Details are in the console.</red>'
+
+# ---------- misc
+update:
+  available: 'A new SNSocial version is available: {latest} (you have {current}). Download: github.com/Somikyy/SNSocial/releases'
+
+# ---------- time
+time:
+  days: 'd'
+  hours: 'h'
+  minutes: 'min'
+  seconds: 'sec'

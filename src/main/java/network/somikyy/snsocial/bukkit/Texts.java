@@ -11,16 +11,22 @@ package network.somikyy.snsocial.bukkit;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import network.somikyy.snsocial.core.Colors;
 import network.somikyy.snsocial.core.Messages;
 import org.bukkit.command.CommandSender;
 
 /**
- * Bridge from {@link Messages} (plain key=value texts) to Adventure components.
+ * Bridge from {@link Messages} (the texts of {@code messages.yml}) to Adventure components.
  *
- * <p>Two families of keys with different contracts: regular keys may carry MiniMessage
- * markup and are deserialized for chat and GUI; {@code bot.*} keys are sent to Telegram/VK
- * as-is and must stay plain text - the bots render no markup, and a stray {@code <green>}
- * in a bot reply reads as a bug to the player. {@link #raw} exists for exactly that path.
+ * <p>Two families of keys with different contracts: regular keys are rendered as markup for
+ * chat and the GUI; {@code bot.*} keys are sent to Telegram/VK, which draw no markup at all,
+ * so for those the colours are removed rather than rendered. {@link #raw} is that path.
+ *
+ * <p>Both paths convert the admin's colour codes first and substitute placeholders second.
+ * The order is the point: a player name or a reward title landing in {@code {reward}} is then
+ * read as text, not as a colour instruction of its own. Values that are the admin's own -
+ * reward titles and lore from {@code config.yml} - are converted where they are read, in
+ * {@link SNSocialConfig}, so they get the same four notations without passing through here.
  */
 final class Texts {
 
@@ -32,15 +38,27 @@ final class Texts {
         this.russian = russian;
     }
 
-    /** Deserialized MiniMessage component for chat or GUI. */
+    /** Deserialized MiniMessage component for chat or the GUI. */
     Component mm(String key, String... placeholders) {
-        return MiniMessage.miniMessage()
-                .deserialize(messages.get(key, russian, placeholders));
+        String template = Colors.toMiniMessage(messages.get(key, russian));
+        return MiniMessage.miniMessage().deserialize(Messages.fill(template, placeholders));
     }
 
-    /** The raw text - for bot replies and console lines that must stay markup-free. */
+    /**
+     * The plain text - for bot replies, console lines and words substituted into other
+     * messages, all of which must stay markup-free.
+     *
+     * <p>Colours are stripped rather than trusted to be absent: the file is the admin's, and
+     * an {@code &a} pasted into a bot text should cost them nothing worse than a colourless
+     * message. A {@code <игрок>} in the same string is not markup and survives.
+     *
+     * <p>The literal two-character sequence {@code \n} becomes a newline here: the messages
+     * format is strictly one line per key, but a bot reply sometimes needs line breaks.
+     * Game-side keys use MiniMessage's own {@code <newline>} tag instead and are unaffected.
+     */
     String raw(String key, String... placeholders) {
-        return messages.get(key, russian, placeholders);
+        String template = Colors.strip(messages.get(key, russian));
+        return Messages.fill(template, placeholders).replace("\\n", "\n");
     }
 
     void send(CommandSender to, String key, String... placeholders) {
