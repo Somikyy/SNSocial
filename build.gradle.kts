@@ -3,7 +3,14 @@ plugins {
 }
 
 group = "network.somikyy"
-version = "26.8.1"
+// The version lives in exactly one place - core/Version.java. Keeping a second copy here cost
+// a release: the tag check reads the Java constant, the jar name reads this line, and when the
+// two drifted apart the workflow published a release with no jar in it.
+version = file("src/main/java/network/somikyy/snsocial/core/Version.java")
+    .readLines()
+    .first { it.contains("VERSION =") }
+    .substringAfter('"')
+    .substringBefore('"')
 description = "Rewards players for subscribing to your Telegram channel and VK group"
 
 repositories {
